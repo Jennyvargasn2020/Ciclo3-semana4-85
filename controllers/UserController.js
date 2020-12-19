@@ -1,13 +1,13 @@
 const db = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const config = require('../secret/config.js');
+//const config = require('../secret/config.js');
 const { restart } = require('nodemon');
 const tokenServices = require('../services/token')
 
-exports.signin = async (req, res, next) => {
+exports.login = async (req, res, next) => {
     try {
-        const user = await db.user.findOne({ where: { email: req.body.email } });
+        const user = await db.Usuario.findOne({ where: { email: req.body.email } });
         if (user) {
             const passwordIsValid = bcrypt.compareSync(req.body.password,
                 user.password);
@@ -15,16 +15,20 @@ exports.signin = async (req, res, next) => {
                 const token = await tokenServices.encode(user);
                 res.status(200).send({
                     auth: true,
-                    accessToken: token
+                    tokenReturn: token
                 })
             } else {
                 res.status(401).json({
-                    error: "Error en el usuario o constraseña"
+                    error: "Error en el usuario o contraseña",
+                    
                 })
             }
         }
+        else{
+            return res.status(404).send('User Not Found.');
+        }
     }
-    catch{
+    catch(error){
         res.status(500).send({
             message:'Error->'
         })
@@ -34,7 +38,7 @@ exports.signin = async (req, res, next) => {
 }
         exports.register = async (req, res, next) => {
             try {
-                const user = await db.user.findOne({ where: { email: req.body.email } });
+                const user = await db.Usuario.findOne({ where: { email: req.body.email } });
                 if (user) {
                     restart.status(409).send({
                         message: "Sorry your request has a conflict with our system state, maybe the email is already "
@@ -42,7 +46,7 @@ exports.signin = async (req, res, next) => {
                 }
                 else {
                     req.body.password = bcrypt.hashSync(req.body.password, 10)
-                    const user = await db.user.create(req.body);
+                    const user = await db.Usuario.create(req.body);
                     res.status(200).json(user);
                 }
             }
@@ -56,7 +60,7 @@ exports.signin = async (req, res, next) => {
 
             exports.list = async (req, res, next) => {
                 try {
-                    const user = await db.user.findAll();
+                    const user = await db.Usuario.findAll();
                     if (user) {
                         res.status(200).json(user);
                     }
@@ -76,9 +80,9 @@ exports.signin = async (req, res, next) => {
         
         exports.update = async (req, res, next) => {
             try {
-                const user = await db.user.findOne({ where: { email: req.body.email } });
+                const user = await db.Usuario.findOne({ where: { email: req.body.email } });
                 if (user) {
-                    const user = await db.user.update({ name: req.body.name },
+                    const user = await db.Usuario.update({ name: req.body.name },
                         {
                             where: {
                                 email: req.body.email
