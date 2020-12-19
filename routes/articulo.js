@@ -4,9 +4,5 @@ const articuloController = require('../controllers/ArticuloController');
 const auth = require('../middlewares/auth');
 
 const router = routerx();
-
-
 router.get('/list', articuloController.list);
-
-
 module.exports = router;
