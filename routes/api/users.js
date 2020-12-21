@@ -2,9 +2,9 @@ const router = require('express').Router();
 const usercontroller = require('../../controllers/UserController.js');
 const auth = require('../../Middlewares/auth.js')
 
-router.get('/list',auth.verificarAdministrador,usercontroller.list);
-router.put('/update',auth.verificarAdministrador, usercontroller.update);
-router.post('/register',auth.verificarAdministrador, usercontroller.register);
+router.get('/list',usercontroller.list);
+router.put('/update', usercontroller.update);
+router.post('/register', usercontroller.register);
 
 
 //api/user/register//

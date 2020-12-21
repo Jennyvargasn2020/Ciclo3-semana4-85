@@ -3,7 +3,7 @@ const tokenService = require('../services/token');
 
 module.exports = {
     verificarAdministrador: async (req, res, next) => {
-        if (!req.headers.token) {
+         if (!req.headers.token) {
             return res.status(404).send({
                 message: 'No token'
             });
@@ -16,13 +16,13 @@ module.exports = {
                     message: 'No autorizado'
                 });
             }
-        }
+        } 
     },
 
 
 
 verificarVendedor: async (req, res, next) => {
-    if (!req.headers.token) {
+     if (!req.headers.token) {
         return res.status(404).send({
             message: 'No token'
         });
@@ -37,7 +37,7 @@ verificarVendedor: async (req, res, next) => {
                 message: 'No autorizado'
             });
         }
-    }
+    } 
 },
 
 
